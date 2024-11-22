@@ -1,3 +1,4 @@
+'''
 import streamlit as st
 
 def main():
@@ -17,8 +18,8 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 '''
+
 import streamlit as st
 import speech_recognition as sr
 import pyttsx3
@@ -71,7 +72,7 @@ def main():
 
 if __name__ == "__main__":
     main()
-'''
+
 
 
 '''
