@@ -1,5 +1,5 @@
 import streamlit as st
-import pyttsx3
+#import pyttsx3
 
 # 챗봇 응답을 생성하는 함수
 def get_chatbot_response(user_input):
@@ -7,10 +7,10 @@ def get_chatbot_response(user_input):
     return f"챗봇: '{user_input}'에 대한 답변입니다."
 
 # TTS (Text-to-Speech) 함수
-def text_to_speech(text):
-    engine = pyttsx3.init()
-    engine.say(text)
-    engine.runAndWait()
+#def text_to_speech(text):
+#    engine = pyttsx3.init()
+#    engine.say(text)
+#    engine.runAndWait()
 
 # HTML과 JavaScript를 사용하여 음성 인식
 html_code = """
@@ -54,7 +54,7 @@ def main():
         chatbot_response = get_chatbot_response(user_input)
         st.text(chatbot_response)    
         # TTS (Text-to-Speech)
-        text_to_speech(chatbot_response)
+        #text_to_speech(chatbot_response)
 
 if __name__ == "__main__":
     main()
