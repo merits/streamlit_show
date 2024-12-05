@@ -1,4 +1,67 @@
+import streamlit as st
+import pyttsx3
 
+# 챗봇 응답을 생성하는 함수
+def get_chatbot_response(user_input):
+    # 여기에서 실제로 챗봇의 응답 로직을 구현할 수 있습니다.
+    return f"챗봇: '{user_input}'에 대한 답변입니다."
+
+# TTS (Text-to-Speech) 함수
+def text_to_speech(text):
+    engine = pyttsx3.init()
+    engine.say(text)
+    engine.runAndWait()
+
+# HTML과 JavaScript를 사용하여 음성 인식
+html_code = """
+<script>
+  function startRecognition() {
+    var recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = 'ko-KR';
+    recognition.onstart = function() { 
+        document.getElementById("status").innerHTML = "음성 인식 시작...";
+    };
+    recognition.onresult = function(event) {
+        var transcript = event.results[0][0].transcript;
+        document.getElementById("result").innerHTML = "사용자: " + transcript;
+        // Python Streamlit에 음성 인식 결과를 전달
+        window.parent.postMessage({text: transcript}, "*");
+    };
+    recognition.onerror = function(event) {
+        document.getElementById("status").innerHTML = "음성 인식 에러: " + event.error;
+    };
+    recognition.start();
+  }
+</script>
+
+<button onclick="startRecognition()">음성 인식 시작</button>
+<p id="status">음성 인식 대기 중...</p>
+<p id="result"></p>
+"""
+
+# Streamlit 앱의 메인 화면
+def main():
+    st.title("음성 대화 챗봇")
+
+    # 음성 인식을 위한 HTML 삽입
+    st.components.v1.html(html_code)
+
+    # 음성 인식 결과를 처리
+    user_input = st.text_input("사용자 음성 입력:")
+
+    if user_input:
+        st.text(f"사용자: {user_input}")
+        chatbot_response = get_chatbot_response(user_input)
+        st.text(chatbot_response)    
+        # TTS (Text-to-Speech)
+        text_to_speech(chatbot_response)
+
+if __name__ == "__main__":
+    main()
+
+
+
+'''
 import streamlit as st
 
 def main():
@@ -18,6 +81,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+'''
+
 
 '''
 import streamlit as st
