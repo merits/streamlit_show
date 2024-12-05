@@ -1,16 +1,10 @@
 import streamlit as st
-#import pyttsx3
 
 # 챗봇 응답을 생성하는 함수
 def get_chatbot_response(user_input):
     # 여기에서 실제로 챗봇의 응답 로직을 구현할 수 있습니다.
     return f"챗봇: '{user_input}'에 대한 답변입니다."
 
-# TTS (Text-to-Speech) 함수
-#def text_to_speech(text):
-#    engine = pyttsx3.init()
-#    engine.say(text)
-#    engine.runAndWait()
 
 # HTML과 JavaScript를 사용하여 음성 인식
 html_code = """
@@ -53,8 +47,7 @@ def main():
         st.text(f"사용자: {user_input}")
         chatbot_response = get_chatbot_response(user_input)
         st.text(chatbot_response)    
-        # TTS (Text-to-Speech)
-        #text_to_speech(chatbot_response)
+    
 
 if __name__ == "__main__":
     main()
