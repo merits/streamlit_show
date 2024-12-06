@@ -2,9 +2,7 @@ import streamlit as st
 
 # 챗봇 응답을 생성하는 함수
 def get_chatbot_response(user_input):
-    # 여기에서 실제로 챗봇의 응답 로직을 구현할 수 있습니다.
     return f"챗봇: '{user_input}'에 대한 답변입니다."
-
 
 # HTML과 JavaScript를 사용하여 음성 인식
 html_code = """
@@ -40,14 +38,19 @@ def main():
     # 음성 인식을 위한 HTML 삽입
     st.components.v1.html(html_code)
 
-    # 음성 인식 결과를 처리
-    user_input = st.text_input("사용자 음성 입력:")
-
-    if user_input:
+    # 음성 인식 결과를 받기 위한 콜백
+    # Streamlit에서 JavaScript와 연동하려면 `session_state`를 이용해서 전달
+    if "user_input" in st.session_state:
+        user_input = st.session_state.user_input
         st.text(f"사용자: {user_input}")
         chatbot_response = get_chatbot_response(user_input)
-        st.text(chatbot_response)    
-    
+        st.text(chatbot_response)
+
+    # 페이지가 로드될 때 음성 인식된 텍스트를 `session_state`에 저장
+    # JavaScript에서 `postMessage`로 전달된 데이터를 수신하여 처리
+    if st.experimental_get_query_params().get("user_input"):
+        user_input = st.experimental_get_query_params().get("user_input")[0]
+        st.session_state.user_input = user_input
 
 if __name__ == "__main__":
     main()
