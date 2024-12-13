@@ -16,7 +16,7 @@ map_data = pd.DataFrame(
 
 #print(map_data)
 
-st.code('st.map(map_data)')
+#st.code('st.map(map_data)')
 # 웹사이트에 어떤 코드인지 표시해주기 
 st.subheader('Map of Data ')
 # 제목 생성 
