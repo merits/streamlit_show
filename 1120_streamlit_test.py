@@ -1,28 +1,36 @@
-# ... 기존 코드 ...
-import numpy as np
+import streamlit as st
 import pandas as pd
-import streamlit as st  # Streamlit 모듈 추가
 
-# 지도 위에 표시될 점 좌표 값을 위도경도에 담습니다.
-base_position = [37.285438, 127.012756]
-# 중심점의 위도, 경도 좌표를 리스트에 담습니다.
+# 카카오 지도 API를 사용하기 위한 HTML 코드
+def display_kakao_map(lat, lon):
+    map_html = f"""
+    <div id="map" style="width: 100%; height: 500px;"></div>
+    <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=f077adabc59c0f4120c0c3bc6d5fae7b"></script>
+    <script>
+        var mapContainer = document.getElementById('map'); // 지도를 표시할 div 
+        var mapOption = {{
+            center: new kakao.maps.LatLng({lat}, {lon}), // 지도의 중심좌표
+            level: 3 // 지도의 확대 레벨
+        }};
+        
+        var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 
-# base_position에, 랜덤으로 생성한 값을 더하여 5개의 좌표를 데이터 프레임으로 생성하였고,
-# 컬럼명은 위도 : lat, 경도 : lon으로 지정하였습니다.
+        // 마커를 생성합니다
+        var markerPosition  = new kakao.maps.LatLng({lat}, {lon}); 
+        var marker = new kakao.maps.Marker({position: markerPosition}); 
+        marker.setMap(map); // 마커를 지도에 표시합니다
+    </script>
+    """
+    st.components.v1.html(map_html, height=600)
 
-#map_data = pd.DataFrame(
-#    np.random.randn(5, 2) / [20, 20] + base_position,  # 2개의 열로 수정
-#    columns=['lat', 'lon']
-#)
-
+# 하나의 좌표만 포함하도록 수정
 map_data = pd.DataFrame(
     {
-        'lat': [37.285438],  # 위도
-        'lon': [127.012756]  # 경도
+        'lat': [37.7749],  # 위도
+        'lon': [-122.4194]  # 경도
     }
 )
 
 # 웹사이트에 어떤 코드인지 표시해주기 
-st.subheader('Map of Data')  # 제목 생성 
-st.map(map_data)  # 지도 생성
-# ... 기존 코드 ...
+st.subheader('Kakao Map')  # 제목 생성 
+display_kakao_map(map_data['lat'][0], map_data['lon'][0])  # 카카오 지도 표시
