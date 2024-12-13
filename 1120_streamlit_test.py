@@ -5,7 +5,7 @@ import pandas as pd
 def display_kakao_map(lat, lon):
     map_html = f"""
     <div id="map" style="width: 100%; height: 500px;"></div>
-    <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_APP_KEY"></script>
+    <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=f077adabc59c0f4120c0c3bc6d5fae7b"></script>
     <script>
         var mapContainer = document.getElementById('map'); // 지도를 표시할 div 
         var mapOption = {{
