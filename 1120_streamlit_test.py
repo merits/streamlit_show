@@ -5,7 +5,7 @@ import pandas as pd
 def display_kakao_map(lat, lon):
     map_html = f"""
     <div id="map" style="width: 100%; height: 500px;"></div>
-    <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=f077adabc59c0f4120c0c3bc6d5fae7b"></script>
+    <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_APP_KEY"></script>
     <script>
         var mapContainer = document.getElementById('map'); // 지도를 표시할 div 
         var mapOption = {{
@@ -17,7 +17,7 @@ def display_kakao_map(lat, lon):
 
         // 마커를 생성합니다
         var markerPosition  = new kakao.maps.LatLng({lat}, {lon}); 
-        var marker = new kakao.maps.Marker({position: markerPosition}); 
+        var marker = new kakao.maps.Marker({{ position: markerPosition }}); // 수정된 부분
         marker.setMap(map); // 마커를 지도에 표시합니다
     </script>
     """
