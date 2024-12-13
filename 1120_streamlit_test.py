@@ -1,132 +1,17 @@
-import streamlit as st
+import numpy as np
+import pandas as pd 
 
-def get_chatbot_response(user_input):
-    # 기존 챗봇 로직을 유지하면서 음성 인식 결과 처리
-    return f"챗봇: '{user_input}'에 대한 답변입니다."
+#지도 위에 표시될 점 좌표 값을 위도경도에 담습니다 .
+base_position =  [37.5073423, 127.0572734]
+#중심점의 위도, 경도 좌표를 리스트에 담습니다.
 
-# 개선된 음성 인식 JavaScript 코드
-html_code = """
-<script>
-let recognition;
-let isRecording = false;
+# base_position에, 랜덤으로 생성한 값을 더하여 5개의 좌표를 데이터 프레임으로 생성하였고,
+# 컬럼명은 위도 :lat  경도 lon으로 지정하였습니다. 
 
-function toggleRecognition() {
-    if (!isRecording) {
-        startRecognition();
-    } else {
-        stopRecognition();
-    }
-}
 
-function startRecognition() {
-    recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-    recognition.lang = 'ko-KR';
-    recognition.continuous = true;
-    recognition.interimResults = true;
-    
-    recognition.onstart = function() {
-        isRecording = true;
-        document.getElementById("status").innerHTML = "음성 인식 중...";
-        document.getElementById("voiceButton").innerHTML = "음성 인식 중지";
-        document.getElementById("voiceButton").classList.add("recording");
-    };
-    
-    recognition.onresult = function(event) {
-        let finalTranscript = '';
-        let interimTranscript = '';
-        
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-            const transcript = event.results[i][0].transcript;
-            if (event.results[i].isFinal) {
-                finalTranscript += transcript;
-            } else {
-                interimTranscript += transcript;
-            }
-        }
-        
-        document.getElementById("result").innerHTML = 
-            "사용자: " + finalTranscript + 
-            '<div style="color: gray;">' + interimTranscript + '</div>';
-            
-        if (finalTranscript) {
-            window.parent.postMessage({text: finalTranscript}, "*");
-        }
-    };
-    
-    recognition.onerror = function(event) {
-        document.getElementById("status").innerHTML = "음성 인식 에러: " + event.error;
-        if (event.error === 'not-allowed') {
-            alert('마이크 권한을 허용해주세요.');
-        }
-        stopRecognition();
-    };
-    
-    recognition.onend = function() {
-        if (isRecording) {
-            recognition.start();
-        }
-    };
-    
-    try {
-        recognition.start();
-    } catch (err) {
-        console.error('음성 인식 시작 오류:', err);
-        alert('음성 인식을 시작할 수 없습니다. HTTPS 연결을 확인해주세요.');
-    }
-}
+map_data = pd.DataFrame(
+    np.random.randn(5, 1) / [20, 20] + base_position , 
+    columns=['lat', 'lon'])
+# map data 생성 : 위치와 경도 
 
-function stopRecognition() {
-    if (recognition) {
-        recognition.stop();
-        isRecording = false;
-        document.getElementById("status").innerHTML = "음성 인식 대기 중...";
-        document.getElementById("voiceButton").innerHTML = "음성 인식 시작";
-        document.getElementById("voiceButton").classList.remove("recording");
-    }
-}
-</script>
-
-<style>
-.recording {
-    background-color: red;
-    color: white;
-}
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    margin-bottom: 10px;
-}
-</style>
-
-<button id="voiceButton" onclick="toggleRecognition()">음성 인식 시작</button>
-<p id="status">음성 인식 대기 중...</p>
-<p id="result"></p>
-"""
-
-def main():
-    st.title("음성 대화 챗봇")
-    
-    # 음성 인식 컴포넌트 추가
-    st.components.v1.html(html_code, height=200)
-    
-    # 세션 상태 처리
-    if "messages" not in st.session_state:
-        st.session_state.messages = []
-    
-    # 음성 인식 결과 처리
-    if "user_input" in st.session_state:
-        user_input = st.session_state.user_input
-        chatbot_response = get_chatbot_response(user_input)
-        st.session_state.messages.append({"role": "user", "content": user_input})
-        st.session_state.messages.append({"role": "assistant", "content": chatbot_response})
-    
-    # 대화 기록 표시
-    for message in st.session_state.messages:
-        if message["role"] == "user":
-            st.text(f"사용자: {message['content']}")
-        else:
-            st.text(message["content"])
-
-if __name__ == "__main__":
-    main()
+print(map_data)
