@@ -26,8 +26,8 @@ def display_kakao_map(lat, lon):
 # 하나의 좌표만 포함하도록 수정
 map_data = pd.DataFrame(
     {
-        'lat': [37.7749],  # 위도
-        'lon': [-122.4194]  # 경도
+        'lat': [37.285438],  # 위도
+        'lon': [127.012756]  # 경도
     }
 )
 
