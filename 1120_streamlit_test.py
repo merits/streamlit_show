@@ -1,26 +1,6 @@
 import streamlit as st
+import folium
 import pandas as pd
-
-# OpenStreetMap을 사용하여 지도를 표시하는 HTML 코드
-def display_openstreetmap(lat, lon):
-    map_html = f"""
-    <div id="map" style="width: 100%; height: 500px;"></div>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script>
-        var map = L.map('map').setView([{lat}, {lon}], 13); // 지도의 중심좌표 및 확대 레벨 설정
-
-        // OpenStreetMap 타일 레이어 추가
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {{
-            maxZoom: 19,
-            attribution: '© OpenStreetMap'
-        }}).addTo(map);
-
-        // 마커를 생성합니다
-        var marker = L.marker([{lat}, {lon}]).addTo(map); // 마커 추가
-    </script>
-    """
-    st.components.v1.html(map_html, height=600)
 
 # 하나의 좌표만 포함하도록 수정
 map_data = pd.DataFrame(
@@ -30,6 +10,16 @@ map_data = pd.DataFrame(
     }
 )
 
-# 웹사이트에 어떤 코드인지 표시해주기 
-st.subheader('OpenStreetMap')  # 제목 생성 
-display_openstreetmap(map_data['lat'][0], map_data['lon'][0])  # OpenStreetMap 표시
+# Folium을 사용하여 지도 생성
+def create_map(lat, lon):
+    # Folium 지도 생성
+    m = folium.Map(location=[lat, lon], zoom_start=13)
+    # 마커 추가
+    folium.Marker([lat, lon], popup='Marker').add_to(m)
+    return m
+
+# Streamlit 앱에서 지도 표시
+st.subheader('Folium Map')  # 제목 생성 
+map_object = create_map(map_data['lat'][0], map_data['lon'][0])  # Folium 지도 생성
+# Folium 지도를 HTML로 변환하여 Streamlit에 표시
+st.write(map_object._repr_html_(), unsafe_allow_html=True)
