@@ -9,9 +9,17 @@ base_position = [37.285438, 127.012756]
 
 # base_position에, 랜덤으로 생성한 값을 더하여 5개의 좌표를 데이터 프레임으로 생성하였고,
 # 컬럼명은 위도 : lat, 경도 : lon으로 지정하였습니다.
+'''
 map_data = pd.DataFrame(
     np.random.randn(5, 2) / [20, 20] + base_position,  # 2개의 열로 수정
     columns=['lat', 'lon']
+)
+'''
+map_data = pd.DataFrame(
+    {
+        'lat': [37.285438],  # 위도
+        'lon': [127.012756]  # 경도
+    }
 )
 
 # 웹사이트에 어떤 코드인지 표시해주기 
