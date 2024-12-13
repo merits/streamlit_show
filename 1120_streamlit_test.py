@@ -1,24 +1,23 @@
 import streamlit as st
 import pandas as pd
 
-# 카카오 지도 API를 사용하기 위한 HTML 코드
-def display_kakao_map(lat, lon):
+# OpenStreetMap을 사용하여 지도를 표시하는 HTML 코드
+def display_openstreetmap(lat, lon):
     map_html = f"""
     <div id="map" style="width: 100%; height: 500px;"></div>
-    <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=e2ad12e31fe75a2c62e0ccfb8e462055"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        var mapContainer = document.getElementById('map'); // 지도를 표시할 div 
-        var mapOption = {{
-            center: new kakao.maps.LatLng({lat}, {lon}), // 지도의 중심좌표
-            level: 3 // 지도의 확대 레벨
-        }};
-        
-        var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+        var map = L.map('map').setView([{lat}, {lon}], 13); // 지도의 중심좌표 및 확대 레벨 설정
+
+        // OpenStreetMap 타일 레이어 추가
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {{
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }}).addTo(map);
 
         // 마커를 생성합니다
-        var markerPosition  = new kakao.maps.LatLng({lat}, {lon}); 
-        var marker = new kakao.maps.Marker({{ position: markerPosition }}); // 마커 생성
-        marker.setMap(map); // 마커를 지도에 표시합니다
+        var marker = L.marker([{lat}, {lon}]).addTo(map); // 마커 추가
     </script>
     """
     st.components.v1.html(map_html, height=600)
@@ -32,5 +31,5 @@ map_data = pd.DataFrame(
 )
 
 # 웹사이트에 어떤 코드인지 표시해주기 
-st.subheader('Kakao Map')  # 제목 생성 
-display_kakao_map(map_data['lat'][0], map_data['lon'][0])  # 카카오 지도 표시
+st.subheader('OpenStreetMap')  # 제목 생성 
+display_openstreetmap(map_data['lat'][0], map_data['lon'][0])  # OpenStreetMap 표시
