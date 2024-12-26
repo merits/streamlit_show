@@ -1,6 +1,10 @@
-import pyaudio
+import pyttsx3
 
-p = pyaudio.PyAudio()
-for i in range(p.get_device_count()):
-    info = p.get_device_info_by_index(i)
-    print(f"Device {i}: {info['name']}")
+def text_to_speech(text):
+    engine = pyttsx3.init()
+    engine.say(text)
+    engine.runAndWait()
+
+if __name__ == "__main__":
+    input_text = input("Enter the text to convert to speech: ")
+    text_to_speech(input_text)
