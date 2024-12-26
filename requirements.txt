@@ -1,3 +1,4 @@
+streamlit
 SpeechRecogmition
 Pyaudio
 pyttsx3
